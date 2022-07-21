@@ -9,6 +9,9 @@ import models.User;
 import views.Menu;
 import views.WelcomeMenu;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
+
 public class WelcomeController extends Controller {
     private static WelcomeController instance = null;
     private WelcomeController(){
@@ -23,7 +26,8 @@ public class WelcomeController extends Controller {
             setInstance(new WelcomeController());
         return WelcomeController.instance;
     }
-    public Messages handleRegister(String userName, String userID, String password, String repeatedPassword, Type type, String birthday, String gmail, RegisterWith registerWith) {
+    public Messages handleRegister(String first_name, String last_name, String userName, Date birthday, String email, String phoneNumber,
+                                   String password, String repeatedPassword, char gender, Type type) {
         if (this.doesUserIDExist(userName)){
             return Messages.USERID_EXIST;
         }
@@ -32,18 +36,18 @@ public class WelcomeController extends Controller {
             return message;
         if (type == null)
             return Messages.INVALID_TYPE;
-        if (type == Type.SIMPLE)
-            new SimpleUser(userName, userID, password,null, gmail,registerWith );
-        else if (type == Type.BUSINESS)
-            new BusinessUser(userName, userID, password,null, gmail, registerWith);
+
         return Messages.SUCCESS;
     }
     public Messages handleLogin(String userName, String password) {
         User user = User.getUserByUserName(userName);
+        /*
         if (user != null && user.getPassword().equals(password)) {
             Menu.setLoggedInUser(user);
             return Messages.SUCCESS;
         }
+
+         */
         return Messages.WRONG_CREDENTIALS;
     }
 
@@ -67,6 +71,7 @@ public class WelcomeController extends Controller {
         return !password.matches("[a-zA-z]");
     }
     private boolean doesUserIDExist(String userName) {
-        return User.getUserByUserID(userName) != null;
+        //return User.getUserByUserID(userName) != null;
+        return false;
     }
 }

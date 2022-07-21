@@ -2,6 +2,7 @@ package views;
 
 import models.User;
 
+import java.text.ParseException;
 import java.util.Scanner;
 
 public abstract class Menu {
@@ -21,6 +22,6 @@ public abstract class Menu {
     public String getChoice() {
         return Menu.getScanner().nextLine().trim();
     }
-    public  abstract void run();
+    public  abstract void run() throws ParseException;
     protected abstract void showOptions();
 }

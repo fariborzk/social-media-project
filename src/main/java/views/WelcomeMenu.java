@@ -3,6 +3,8 @@ package views;
 import controller.WelcomeController;
 import enums.Messages;
 
+import java.text.ParseException;
+
 public class WelcomeMenu extends Menu{
     private static WelcomeMenu instance = null;
     private WelcomeController welcomeController = null;
@@ -26,7 +28,7 @@ public class WelcomeMenu extends Menu{
     }
 
     @Override
-    public void run() {
+    public void run() throws ParseException {
         this.showOptions();
         String choice = this.getChoice();
         switch (choice) {

@@ -1,13 +1,11 @@
 package models;
 
 import enums.RegisterWith;
+import enums.Type;
 
-public class SimpleUser extends User{
+import java.util.Date;
 
-    private String birthDay = null;
-    public SimpleUser(String username, String userID, String password, String birthDay, String mail, RegisterWith registerWith) {
-        super(username, userID, password, mail, registerWith);
-        this.birthDay = birthDay;
-    }
+public class SimpleUser {
+
 
 }

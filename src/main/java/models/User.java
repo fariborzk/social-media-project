@@ -1,30 +1,45 @@
 package models;
 
 import enums.RegisterWith;
+import enums.Type;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
-public abstract class User {
+public  class User {
     private static ArrayList<User> allUsers = new ArrayList<>();
-    private static int id = 0;
-    private final String creat_At;
-    private String mail = null;
+    private String joinDate;
+    private String email = null;
     private String username;
     private String password;
-    private String userID;
+    private Integer phoneNumber = null;
+    private String first_name;
+    private String last_name;
+    private char gender;
+    private Type type;
+    private String forgetPassQ = null;
+    private String getForgetPassA = null;
     private RegisterWith registerWith;
-    public  User(String username,String userID, String password, String mail, RegisterWith registerWith){
-        this.userID = userID;
+    private Date birthday;
+    public  User(String first_name, String last_name, String username, String password, Date birthday, Type type, char gender, Integer phoneNumber, String email, RegisterWith registerWith){
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.birthday = birthday;
         this.password = password;
         this.username = username;
         this.registerWith = registerWith;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/mm/dd || HH:mm:ss ");
-        if (mail != null)
-            this.mail = mail;
+        this.gender = gender;
+        if (type == Type.BUSINESS) this.type = type;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd || HH:mm:ss ");
+        if (email != null)
+            this.email = email;
+        if (phoneNumber != null)
+            this.phoneNumber = phoneNumber;
         LocalDateTime now = LocalDateTime.now();
-        this.creat_At = now.format(formatter);
+        this.joinDate = now.format(formatter);
         allUsers.add(this);
     }
     public static models.User getUserByUserName(String username){
@@ -33,76 +48,7 @@ public abstract class User {
                 return user;
         return null;
     }
-    public static int getId() {
-        return id;
-    }
 
-    public static void setId(int id) {
-        models.User.id = id;
-    }
-
-    public static User getUserByUserID(String userID) {
-        for (models.User user : allUsers)
-            if (user.userID.equals(userID))
-                return user;
-        return null;
-    }
-
-    public String getCreat_At() {
-        return creat_At;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public static ArrayList<User> getAllUsers() {
-        return allUsers;
-    }
-
-    public static void setAllUsers(ArrayList<User> allUsers) {
-        User.allUsers = allUsers;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public void setUserId(String userId) {
-        this.userID = userId;
-    }
-
-    public RegisterWith getRegisterWith() {
-        return registerWith;
-    }
-
-    public void setRegisterWith(RegisterWith registerWith) {
-        this.registerWith = registerWith;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
 }
 
 

@@ -5,6 +5,11 @@ import enums.Messages;
 import enums.RegisterWith;
 import enums.Type;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class RegisterMenu extends Menu {
     private static RegisterMenu instance = null;
     private WelcomeController welcomeController = null;
@@ -24,7 +29,7 @@ public class RegisterMenu extends Menu {
     }
 
     @Override
-    public void run() {
+    public void run() throws ParseException {
         showOptions();
         Type type = null;
         String choice = this.getChoice();
@@ -47,10 +52,10 @@ public class RegisterMenu extends Menu {
                 System.out.println(Messages.INVALID_CHOICE);
         }
     }
-    private void register(Type type){
+    private void register(Type type) throws ParseException {
         RegisterWith registerWith;
         registerOptions();
-        String choice = this.getChoice();
+        String choice = this.getChoice().toLowerCase();
         switch (choice){
             case "phonenumber":
             case "1":
@@ -79,7 +84,7 @@ public class RegisterMenu extends Menu {
         }
         else{
             email = this.getInput("enter your  mail");
-            registerWithPhoneNumber();
+            registerWithEmail();
             phoneNumber = null;
             String choiceOp = this.getChoice();
             if (choiceOp.equals("yes") || choiceOp.equals("1"))
@@ -88,12 +93,15 @@ public class RegisterMenu extends Menu {
             }
         }
         System.out.println("Please Enter Your Info To Register...");
-        String userName = this.getInput("User Name");
-        String userID = this.getInput("user ID");
-        String password = this.getInput("Password");
-        String repeatedPassword = this.getInput("Please Repeat Your password");
+        String first_name = this.getInput("first name");
+        String last_name = this.getInput("last name");
         String birthday = this.getInput("birthday");
-        Messages message = this.welcomeController.handleRegister(userName, userID, password, repeatedPassword, type, birthday, email, registerWith);
+        Date birthDate = new SimpleDateFormat("YYYY-MM-DD").parse(birthday);
+        String userName = this.getInput("User Name");
+        String password = this.getInput("Password");
+        String gender = this.getInput("gender(F/M)");
+        String repeatedPassword = this.getInput("Please Repeat Your password");
+        Messages message = this.welcomeController.handleRegister(first_name,last_name, userName, birthDate, email, phoneNumber,password,repeatedPassword,gender.charAt(0),type);
         if (message == Messages.SUCCESS){
             System.out.println("you registered successfully");
         }
