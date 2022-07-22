@@ -18,13 +18,13 @@ public  class User {
     private Integer phoneNumber = null;
     private String first_name;
     private String last_name;
-    private char gender;
+    private String gender;
     private Type type;
     private String forgetPassQ = null;
     private String getForgetPassA = null;
     private RegisterWith registerWith;
-    private Date birthday;
-    public  User(String first_name, String last_name, String username, String password, Date birthday, Type type, char gender, Integer phoneNumber, String email, RegisterWith registerWith){
+    private String birthday;
+    public  User(String first_name, String last_name, String username, String password, String birthday, Type type, String gender, Integer phoneNumber, String email, RegisterWith registerWith){
         this.first_name = first_name;
         this.last_name = last_name;
         this.birthday = birthday;

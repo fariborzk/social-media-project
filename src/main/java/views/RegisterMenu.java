@@ -27,7 +27,6 @@ public class RegisterMenu extends Menu {
             RegisterMenu.setInstance(new RegisterMenu());
         return RegisterMenu.instance;
     }
-
     @Override
     public void run() throws ParseException {
         showOptions();
@@ -75,7 +74,6 @@ public class RegisterMenu extends Menu {
         {
             phoneNumber = this.getInput("enter your phone number");
             registerWithPhoneNumber();
-            email = null;
             String choiceOp = this.getChoice();
             if (choiceOp.equals("yes") || choiceOp.equals("1"))
             {
@@ -85,7 +83,6 @@ public class RegisterMenu extends Menu {
         else{
             email = this.getInput("enter your  mail");
             registerWithEmail();
-            phoneNumber = null;
             String choiceOp = this.getChoice();
             if (choiceOp.equals("yes") || choiceOp.equals("1"))
             {
@@ -95,13 +92,12 @@ public class RegisterMenu extends Menu {
         System.out.println("Please Enter Your Info To Register...");
         String first_name = this.getInput("first name");
         String last_name = this.getInput("last name");
-        String birthday = this.getInput("birthday");
-        Date birthDate = new SimpleDateFormat("YYYY-MM-DD").parse(birthday);
+        String birthday = this.getInput("birthday (YYYY-dd-mm)");
         String userName = this.getInput("User Name");
         String password = this.getInput("Password");
         String gender = this.getInput("gender(F/M)");
         String repeatedPassword = this.getInput("Please Repeat Your password");
-        Messages message = this.welcomeController.handleRegister(first_name,last_name, userName, birthDate, email, phoneNumber,password,repeatedPassword,gender.charAt(0),type);
+        Messages message = this.welcomeController.handleRegister(first_name,last_name, userName, birthday, email, phoneNumber,password,repeatedPassword,gender,type);
         if (message == Messages.SUCCESS){
             System.out.println("you registered successfully");
         }
