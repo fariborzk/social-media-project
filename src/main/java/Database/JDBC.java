@@ -1,16 +1,16 @@
 package Database;
-
-import controller.WelcomeController;
 import enums.Type;
-
-import javax.xml.crypto.Data;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
-public class JDBC {
+public class JDBC
+{
    private Statement statement;
    private Connection connection;
-    private static JDBC instance = null;
-
+   private static JDBC instance = null;
     private static void setInstance(JDBC jdbc)
     {
         JDBC.instance = jdbc;
@@ -33,8 +33,8 @@ public class JDBC {
     }
     public void addNewUserToMySql(String first_name, String last_name, String birthday, String email, String phone_number, String join_date, String user_password, String username, String gender
             , String forget_passQ, String  forget_passA, Type type) throws SQLException {
-        String sql = " insert into user_profile (first_name, last_name, username, birthday, email, phone_number, join_date, gender, user_type)"
-                + " values (?, ?, ?, ?, ?, ? , ?, ?, ?, ?)";
+        //System.out.println(user_password);
+        String sql = " insert into user_profile (first_name, last_name, username, birthday, email, phone_number, join_date, gender,user_password, user_type)" + " values (?, ?, ?, ?, ?, ? , ?, ?, ?, ?)";
         String user_type;
         if (type == Type.SIMPLE) user_type = "S";
         else user_type = "B";
@@ -53,8 +53,23 @@ public class JDBC {
     }
     public ResultSet findUserNameFromDatabase(String username){
         ResultSet resultSet = null;
-        try {
+        try
+        {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user_profile WHERE username=? ");
+            preparedStatement.setString(1, username);
+            resultSet = preparedStatement.executeQuery();
+        }
+        catch (Exception e)
+        {
+            System.out.println("error while executing...");
+            System.out.println(e);
+        }
+       return resultSet;
+    }
+    public ResultSet findUserPasswordFromDatabase(String username){
+        ResultSet resultSet = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT user_password FROM user_profile WHERE username=?  ;");
             preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
         }
@@ -62,7 +77,19 @@ public class JDBC {
             System.out.println("error while executing...");
             System.out.println(e);
         }
+        return resultSet;
+    }
 
-       return resultSet;
+    public void addNewGroupToSDL(String groupName, String groupID, String admin_id) throws SQLException {
+        String sql = " insert into group_profile (group_name, group_id, created_time, admin_id)" + " values (?, ?, ?, ?)";
+        LocalDateTime now = LocalDateTime.now();
+        String datetime = LocalDate.now().toString() + "T"+ LocalTime.now().toString();
+        System.out.println(datetime);
+        PreparedStatement preparedStmt = connection.prepareStatement(sql);
+        preparedStmt.setString (1, groupName);
+        preparedStmt.setString (2, groupID);
+        preparedStmt.setString (3, datetime);
+        preparedStmt.setString (4, admin_id);
+        preparedStmt.execute();
     }
 }

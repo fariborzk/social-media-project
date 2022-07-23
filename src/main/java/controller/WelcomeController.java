@@ -72,14 +72,21 @@ public class WelcomeController extends Controller {
         return Messages.SUCCESS;
     }
     public Messages handleLogin(String userName, String password) {
-        User user = User.getUserByUserName(userName);
-        /*
-        if (user != null && user.getPassword().equals(password)) {
-            Menu.setLoggedInUser(user);
-            return Messages.SUCCESS;
-        }
+        if (!doesUserNameExist(userName))
+            return Messages.NO_USER_EXIST;
+        try {
+            ResultSet resultSet = JDBC.getInstance().findUserPasswordFromDatabase(userName);
+            while (resultSet.next()){
+                if(resultSet.getString("user_password").equals(password)){
+                    return Messages.SUCCESS;
+                }
 
-         */
+                else return Messages.MISMATCH_PASSWORD;
+            }
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
         return Messages.WRONG_CREDENTIALS;
     }
 

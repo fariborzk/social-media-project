@@ -4,6 +4,8 @@ import controller.WelcomeController;
 import enums.Messages;
 import enums.Type;
 
+import java.text.ParseException;
+
 public class LoginMenu extends Menu{
     private static LoginMenu instance = null;
     private WelcomeController welcomeController = null;
@@ -21,19 +23,20 @@ public class LoginMenu extends Menu{
             LoginMenu.setInstance(new LoginMenu());
         return LoginMenu.instance;
     }
-    private void login() {
+    private void login() throws ParseException {
         String userName = this.getInput("user name");
         String password = this.getInput("password");
         Messages message = this.welcomeController.handleLogin(userName, password);
         if (message == Messages.SUCCESS){
-            //MainMenu.getInstance().run();
+            System.out.println(Messages.SUCCESS);
+            new MainMenu(userName).run();
         }
         else
             System.out.println(message);
     }
 
     @Override
-    public void run() {
+    public void run() throws ParseException {
         showOptions();
         Type type = null;
         String choice = this.getChoice();

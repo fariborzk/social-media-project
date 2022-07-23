@@ -42,6 +42,7 @@ public  class User {
         this.joinDate = now.format(formatter);
         allUsers.add(this);
     }
+
     public static models.User getUserByUserName(String username){
         for (models.User user : allUsers)
             if (user.username.equals(username))
