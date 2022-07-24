@@ -38,6 +38,7 @@ public class MainMenu extends Menu{
                 break;
             case "2":
             case "groups":
+                showAllGroups();
                 break;
             case "3":
             case "new Group":
@@ -55,14 +56,35 @@ public class MainMenu extends Menu{
         }
     }
 
-    private void createNewGroup() {
-        String groupName = this.getInput("group name > ");
-        String groupID = this.getInput("groupID (@groupID) >");
+    private void showAllGroups() {
+        ResultSet adminResultSet = jdbc.findAllAdminGroups(user_id);
+        ResultSet simpleResultSet = jdbc.fillAllSimpleGroups();
+        System.out.println("groups that your admin :");
+        try {
+            while (adminResultSet.next())
+            {
+                String group_name = adminResultSet.getString("group_name");
+                String group_id = adminResultSet.getString("group_id");
+                System.out.println("group_name : " + group_name + " group_id : " + group_id);
+            }
+            String choice  = this.getInput("enter group_id :");
+            Messages messages =mainController.handleGroup(choice, user_id);
+            System.out.println(messages);
+            //if (messages == Messages.SUCCESS)
 
-        System.out.println(mainController.handleCreateGroup(groupName, groupID, user_id));
 
+        }
+       catch (Exception e){
+           System.out.println(e);
+       }
     }
 
+    private void createNewGroup() throws ParseException {
+        String groupName = this.getInput("group name > ");
+        String groupID = this.getInput("groupID (@groupID) >");
+        System.out.println(mainController.handleCreateGroup(groupName, groupID, user_id));
+        run();
+    }
     @Override
     protected void showOptions() {
         System.out.println(userName + " " + user_id);

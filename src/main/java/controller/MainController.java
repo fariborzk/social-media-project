@@ -2,6 +2,9 @@ package controller;
 
 import Database.JDBC;
 import enums.Messages;
+import views.GroupView;
+
+import java.sql.ResultSet;
 
 public class MainController extends Controller {
     private static MainController mainController = null;
@@ -38,5 +41,25 @@ public class MainController extends Controller {
     private boolean checkGroupIDFormat(String groupID){
         return groupID.matches("@.+");
     }
-
+    public  Messages handleGroup(String group_id,String adminID){
+        ResultSet resultSet = jdbc.findGroupsFromDataBase(group_id,adminID);
+        try {
+            while (resultSet.next()){
+                if (resultSet.getString("group_id").equals(group_id))
+                {
+                    String group_name = resultSet.getString("group_name");
+                    String id = resultSet.getString("id");
+                    String created_date = resultSet.getString("created_time");
+                    new GroupView(group_id, group_name, id, created_date, true, adminID).run();
+                    return Messages.SUCCESS;
+                }
+                else
+                    System.out.println(Messages.GROUP_ID_DO_NOT_EXIST);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e +"\n" + e.fillInStackTrace());
+        }
+        return null;
+    }
 }

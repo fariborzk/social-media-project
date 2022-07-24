@@ -19,10 +19,11 @@ public enum Messages {
     GENDER_CANT_BE_EMPTY("gender cannot be empty ... please enter your message"),
     INVALID_PHONE_NUMBER("please enter a valid phone number"),
     INVALID_GENDER("please Enter a valid gender... F for female / M for male "),
-    NO_USER_EXIST("no user exist while that username..."),
+    NO_USER_EXIST("no user exist with that username..."),
     INVALID_GROUP_ID("group id format is invalid"),
     GROUP_ID_EXISTS("this user id exists"),
-    SQL_EXCEPTION("SQL exception");
+    SQL_EXCEPTION("SQL exception"),
+    GROUP_ID_DO_NOT_EXIST("this group_id do not exist");
     private String message;
     Messages(String message)
     {

@@ -92,4 +92,99 @@ public class JDBC
         preparedStmt.setString (4, admin_id);
         preparedStmt.execute();
     }
+
+    public ResultSet findAllAdminGroups(String user_id) {
+        ResultSet resultSet = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT group_name, group_id FROM group_profile WHERE  admin_id = ?;");
+            preparedStatement.setString(1, user_id);
+            resultSet = preparedStatement.executeQuery();
+        }
+        catch (Exception e){
+            System.out.println("error while executing...");
+            System.out.println(e);
+        }
+        return resultSet;
+    }
+   public ResultSet findGroupsFromDataBase(String group_id, String admin_id){
+        ResultSet resultSet = null;
+       try {
+           PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM group_profile WHERE  admin_id = ? AND group_id = ?;");
+           preparedStatement.setString(1, admin_id);
+           preparedStatement.setString(2, group_id);
+           resultSet = preparedStatement.executeQuery();
+       }
+       catch (Exception e){
+           System.out.println("error while executing...");
+           System.out.println(e);
+       }
+       return resultSet;
+   }
+    public ResultSet fillAllSimpleGroups() {
+        return null;
+    }
+    public void addGroupMember(String group_id, String user_id) {
+        String sql = " insert into group_membership (user_id, group_id, joined_date)" + " values (?, ?, ?)";
+        LocalDateTime now = LocalDateTime.now();
+        String datetime = LocalDate.now().toString() + "T"+ LocalTime.now().toString();
+        System.out.println(datetime);
+        try {
+            PreparedStatement preparedStmt = connection.prepareStatement(sql);
+            preparedStmt.setString (1, user_id);
+            preparedStmt.setString (2, group_id);
+            preparedStmt.setString (3, datetime);
+            preparedStmt.execute();
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+
+    }
+    public void addGroupPost(String group_id, String user_id, String address, String post_type, String forwarded_from, String replied_to){
+        String sql = " insert into group_post (posted_user_id, group_id, created_datetime, media_location, post_type)" + " values (?, ?, ?, ?, ?)";
+        LocalDateTime now = LocalDateTime.now();
+        String datetime = LocalDate.now().toString() + "T"+ LocalTime.now().toString();
+        System.out.println(datetime);
+        try {
+            PreparedStatement preparedStmt = connection.prepareStatement(sql);
+            preparedStmt.setString (1, user_id);
+            preparedStmt.setString (2, group_id);
+            preparedStmt.setString (3, datetime);
+            preparedStmt.setString (4, address);
+            preparedStmt.setString (5, post_type);
+            preparedStmt.execute();
+            System.out.println("here");
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public String getNumberOfTextMessage() {
+        String sql = "SELECT COUNT(*) AS num " +
+                "FROM group_post " +
+                "WHERE post_type =?;";
+        ResultSet resultSet = null;
+        try {
+            PreparedStatement preparedStmt = connection.prepareStatement(sql);
+            preparedStmt.setString (1, "T");
+            resultSet = preparedStmt.executeQuery();
+        }
+       catch (Exception e){
+           System.out.println("error in getNumber of textMessages");
+           System.out.println(e.getStackTrace());
+       }
+
+        try {
+            while (resultSet.next()){
+                System.out.println(resultSet.getInt("num"));
+                return String.valueOf(resultSet.getInt("num"));
+            }
+        }
+        catch (Exception e){
+            System.out.println(e);
+            System.out.println(e.getStackTrace());
+        }
+       return "0";
+            }
 }
