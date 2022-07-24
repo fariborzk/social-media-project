@@ -120,6 +120,20 @@ public class JDBC
        }
        return resultSet;
    }
+   public ResultSet findGroupsFromDataBase(String group_id){
+       ResultSet resultSet = null;
+       try {
+           PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM group_profile WHERE group_id = ?;");
+           preparedStatement.setString(1, group_id);
+
+           resultSet = preparedStatement.executeQuery();
+       }
+       catch (Exception e){
+           System.out.println("error while executing...");
+           System.out.println(e);
+       }
+       return resultSet;
+   }
     public ResultSet fillAllSimpleGroups() {
         return null;
     }
@@ -187,4 +201,23 @@ public class JDBC
         }
        return "0";
             }
+
+    public ResultSet findAllJoinedGroups(String user_id) {
+        ResultSet resultSet = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * " +
+                    "FROM group_profile" +
+                    " WHERE id IN ( " +
+                    "    SELECT group_id" +
+                    "    FROM group_membership" +
+                    "    WHERE user_id = ?);");
+            preparedStatement.setString(1, user_id);
+            resultSet = preparedStatement.executeQuery();
+        }
+        catch (Exception e){
+            System.out.println("error while executing...");
+            System.out.println(e);
+        }
+        return resultSet;
+    }
 }

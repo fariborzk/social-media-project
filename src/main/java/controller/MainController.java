@@ -41,16 +41,22 @@ public class MainController extends Controller {
     private boolean checkGroupIDFormat(String groupID){
         return groupID.matches("@.+");
     }
-    public  Messages handleGroup(String group_id,String adminID){
-        ResultSet resultSet = jdbc.findGroupsFromDataBase(group_id,adminID);
+    public  Messages handleGroup(String group_id, String adminID, boolean admin){
+        System.out.println("here2");
+        ResultSet resultSet;
+        if (admin)
+         resultSet = jdbc.findGroupsFromDataBase(group_id, adminID);
+        else
+            resultSet = jdbc.findGroupsFromDataBase(group_id);
         try {
             while (resultSet.next()){
                 if (resultSet.getString("group_id").equals(group_id))
                 {
+                    System.out.println("here");
                     String group_name = resultSet.getString("group_name");
                     String id = resultSet.getString("id");
                     String created_date = resultSet.getString("created_time");
-                    new GroupView(group_id, group_name, id, created_date, true, adminID).run();
+                    new GroupView(group_id, group_name, id, created_date, admin, adminID).run();
                     return Messages.SUCCESS;
                 }
                 else

@@ -57,26 +57,43 @@ public class MainMenu extends Menu{
     }
 
     private void showAllGroups() {
-        ResultSet adminResultSet = jdbc.findAllAdminGroups(user_id);
         ResultSet simpleResultSet = jdbc.fillAllSimpleGroups();
-        System.out.println("groups that your admin :");
+        System.out.println("1. groups that you are admin");
+        System.out.println("2. other groups");
+        String choice = this.getChoice();
+        switch (choice){
+            case "1":
+              groups(true);
+                break;
+            case "2":
+              groups(false);
+                break;
+            default:
+                System.out.println(Messages.INVALID_CHOICE);
+                break;
+        }
+
+    }
+
+    public void  groups(boolean admin){
+        ResultSet resultSet;
+        if (admin)
+        resultSet = jdbc.findAllAdminGroups(user_id);
+        else
+            resultSet = jdbc.findAllJoinedGroups(user_id);
         try {
-            while (adminResultSet.next())
-            {
-                String group_name = adminResultSet.getString("group_name");
-                String group_id = adminResultSet.getString("group_id");
+            while (resultSet.next()) {
+                String group_name = resultSet.getString("group_name");
+                String group_id = resultSet.getString("group_id");
                 System.out.println("group_name : " + group_name + " group_id : " + group_id);
             }
-            String choice  = this.getInput("enter group_id :");
-            Messages messages =mainController.handleGroup(choice, user_id);
+            String choice = this.getInput("enter group_id :");
+            Messages messages = mainController.handleGroup(choice, user_id, admin);
             System.out.println(messages);
-            //if (messages == Messages.SUCCESS)
-
-
         }
-       catch (Exception e){
-           System.out.println(e);
-       }
+        catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     private void createNewGroup() throws ParseException {
